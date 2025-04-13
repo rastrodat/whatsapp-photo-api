@@ -1,11 +1,16 @@
 const express = require('express');
-const { Client } = require('whatsapp-web.js');
+const { Client, LocalAuth } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-const client = new Client();
+const client = new Client({
+  authStrategy: new LocalAuth({
+    dataPath: "wwebjs_cache"
+  })
+});
+
 client.on('qr', (qr) => {
   console.log('QR RECEBIDO', qr);
   qrcode.generate(qr, { small: true });
